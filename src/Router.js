@@ -12,9 +12,9 @@ const RouterComponent = () => {
             <Overlay key = "overlay">
                 <Scene key = "root" hideNavBar>
                     <Scene key = "login" component = { Login }  />
-                    <Scene key = "signup" component = { Signup }  />
+                    <Scene key = "signup" component = { Signup } initial />
                     <Scene key = "additionalinfo" component = { AdditionalInfo } />
-                    <Scene key = "joinchapter" component = { JoinChapter } initial />
+                    <Scene key = "joinchapter" component = { JoinChapter } />
                     <Scene key = "spinner" component = { Spinner } />
                 </Scene>
             </Overlay>
