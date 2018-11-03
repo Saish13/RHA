@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { StyleSheet, View, ProgressBarAndroid } from "react-native";
 import { Card, Input, Button, ButtonGroup, Text } from "react-native-elements";
+import { connect } from "react-redux";
+import { nameChanged, contactNumberChanged, genderChanged, userTypeChanged } from "../../Actions/AuthAction";
 
 class AdditionalInfo extends Component {
     render() {
@@ -18,6 +20,7 @@ class AdditionalInfo extends Component {
                         inputContainerStyle = {styles.inputContainerStyle}
                         containerStyle = {styles.containerStyle}
                         inputStyle = {{height:60}}
+                        onChangeText = {(textInput) => this.props.nameChanged(textInput)}
                     />
                     <Input
                         keyboardType = "number-pad"
@@ -26,19 +29,22 @@ class AdditionalInfo extends Component {
                         inputContainerStyle = {styles.inputContainerStyle}
                         containerStyle = {styles.containerStyle}
                         inputStyle = {{height:60}}
+                        onChangeText = {(textInput) => this.props.contactNumberChanged(textInput)}
                     />
                     <Text style = {{marginLeft: 20,paddingTop:10,paddingBottom:10,fontWeight:'bold'}}> GENDER </Text>
                     <ButtonGroup
-                        selectedIndex = {-1}
                         buttons = {genderButtons}
                         containerStyle = {styles.genderButtonStyle}
+                        onPress = {(selectedIndex) => this.props.genderChanged(selectedIndex)}
+                        selectedIndex = {this.props.gender}
                     />
 
                     <Text style = {{marginLeft: 20,paddingBottom:10,fontWeight:'bold'}}> USER TYPE </Text>
                     <ButtonGroup
-                        selectedIndex = {0}
                         buttons = {userTypeButtons}
                         containerStyle = {styles.usertypeButtonStyle}
+                        onPress = {(selectedIndex) => this.props.userTypeChanged(selectedIndex)}
+                        selectedIndex = {this.props.userType}
                     />
                     <Button
                         title='Continue'
@@ -89,4 +95,20 @@ const styles = StyleSheet.create({
 });
 
 
-export default AdditionalInfo;
+const mapDispatchToProps = {
+    nameChanged,
+    contactNumberChanged,
+    genderChanged,
+    userTypeChanged
+}
+
+const mapStateToProps = state => {
+    return {
+        name: state.auth.name,
+        contactNumber: state.auth.contactNumber,
+        gender: state.auth.gender,
+        userType: state.auth.userType
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(AdditionalInfo);

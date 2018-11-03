@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import { View } from "react-native";
 import { Card, Input, Button } from "react-native-elements";
 import { StyleSheet } from "react-native";
+import { connect } from "react-redux";
+import { loginEmailChanged, loginPasswordChanged } from "../../Actions/AuthAction";
 
 class Login extends Component {
     render() {
@@ -15,7 +17,8 @@ class Login extends Component {
                         inputContainerStyle = {styles.inputContainerStyle}
                         containerStyle = {styles.containerStyle}
                         inputStyle = {{height:60}}
-                        
+                        onChangeText = {(textInput) => this.props.loginEmailChanged(textInput)}
+                        value = {this.props.email}
                     />
                     <Input
                         secureTextEntry
@@ -24,6 +27,8 @@ class Login extends Component {
                         inputContainerStyle = {styles.inputContainerStyle}
                         containerStyle = {styles.containerStyle}
                         inputStyle = {{height:60}}
+                        onChangeText = {(textInput) => this.props.loginPasswordChanged(textInput)}
+                        value = {this.props.password}
                     />
 
                     <Button
@@ -66,4 +71,16 @@ const styles = StyleSheet.create({
     }
 });
 
-export default Login;
+const mapDispatchToProps = {
+    loginEmailChanged,
+    loginPasswordChanged
+}
+
+const mapStateToProps = state => {
+    return {
+        email: state.auth.email_login,
+        password: state.auth.password_login
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login);

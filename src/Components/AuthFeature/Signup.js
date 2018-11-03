@@ -1,6 +1,9 @@
 import React, { Component } from "react";
 import { StyleSheet, View } from "react-native";
 import { Card, Input, Button } from "react-native-elements";
+import { emailChanged, passwordChanged, confirmPasswordChanged } from "../../Actions/AuthAction";
+import { connect } from "react-redux";
+
 
 class Signup extends Component {
     render() {
@@ -14,7 +17,8 @@ class Signup extends Component {
                         inputContainerStyle = {styles.inputContainerStyle}
                         containerStyle = {styles.containerStyle}
                         inputStyle = {{height:60}}
-                        
+                        onChangeText = {(textInput) => this.props.emailChanged(textInput)}
+                        value = {this.props.email}
                     />
                     <Input
                         secureTextEntry
@@ -23,6 +27,8 @@ class Signup extends Component {
                         inputContainerStyle = {styles.inputContainerStyle}
                         containerStyle = {styles.containerStyle}
                         inputStyle = {{height:60}}
+                        onChangeText = {(textInput) => this.props.passwordChanged(textInput)}
+                        value = {this.props.password}
                     />
 
                     <Input
@@ -32,8 +38,9 @@ class Signup extends Component {
                         inputContainerStyle = {styles.inputContainerStyle}
                         containerStyle = {styles.containerStyle}
                         inputStyle = {{height:60}}
+                        onChangeText = {(textInput) => this.props.confirmPasswordChanged(textInput)}
+                        value = {this.props.confirmPassword}
                     />
-
 
                     <Button
                         title='Signup'
@@ -75,4 +82,18 @@ const styles = StyleSheet.create({
     }
 });
 
-export default Signup;
+const mapDispatchToProps = {
+    emailChanged,
+    passwordChanged,
+    confirmPasswordChanged
+}
+
+const mapStateToProps = state => {
+    return {
+        email: state.auth.email,
+        password: state.auth.password,
+        confirmPassword: state.auth.confirmPassword
+    };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Signup);
