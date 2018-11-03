@@ -6,6 +6,9 @@ import { connect } from "react-redux";
 import { loginEmailChanged, loginPasswordChanged } from "../../Actions/AuthAction";
 
 class Login extends Component {
+    constructor() {
+        super();
+    }
     render() {
         return(
             <View style = {styles.loginContainer}>

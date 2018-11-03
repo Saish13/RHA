@@ -1,3 +1,6 @@
+import database, { firebase } from "../Components/Common/Firebase";
+import { Actions } from "react-native-router-flux";
+
 export const loginEmailChanged = (textInput) => {
     return {
         type: 'EMAIL_LOGIN_CHANGED',
@@ -60,3 +63,43 @@ export const userTypeChanged = (selectedIndex) => {
         payload: selectedIndex
     };
 };
+
+export const signupUser = ({email, password, confirmPassword}) => {
+    return (dispatch) => {
+        if (password === confirmPassword) {
+            dispatch({type: 'LOADING'})
+            firebase.auth().createUserWithEmailAndPassword(email, password)
+            .then(user => {
+                dispatch({type: 'SIGNUP_SUCCESS', payload: user});
+                Actions.additionalinfo();
+            });
+        }
+        else {
+            dispatch({type: 'SIGNUP_FAILURE'});
+        }
+    };
+};
+
+export const addAdditionalInfo = ({uid, name, contactNumber, gender, userType}) => {
+    return (dispatch) => {
+        console.log(uid)
+        dispatch({type: 'LOADING'})
+        database.ref('users/'+ uid).set({
+            name: name,
+            contactNumber: contactNumber,
+            gender: gender,
+            userType: userType,
+            profilePicture: '',
+            location: {
+                lat: '',
+                lng: ''
+            }
+        })
+        .then(snapshot => {
+            console.log(snapshot);
+            dispatch({type: 'ADDITIONAL_INFO_SUCCESS'})
+            Actions.joinchapter();
+        })
+        .catch(e => console.log(e));
+    }
+}

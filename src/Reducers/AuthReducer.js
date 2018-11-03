@@ -5,7 +5,7 @@ const initialDefaultState = {
     password: '',
     confirmPassword: '',
     name: '',
-    contacNumber: '',
+    contactNumber: '',
     gender: -1,
     userType: 0,
     loading: false,
@@ -34,6 +34,14 @@ export default (state = initialDefaultState, action) => {
             return { ...state, email_login: action.payload }
         case 'PASSWORD_LOGIN_CHANGED':
             return { ...state, password_login: action.payload }
+        case 'LOADING':
+            return { ...state, loading: true }
+        case 'SIGNUP_SUCCESS':
+            return { ...state, loading: false, email: '', password: '', confirmPassword: '', user: action.payload }
+        case 'SIGNUP_FAILURE':
+            return { ...state, loading: false }
+        case 'ADDITIONAL_INFO_SUCCESS':
+            return { ...state, loading: false, name: '', contactNumber: '', gender: -1, userType: -1 }
         default:
             return state;
     }

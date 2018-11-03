@@ -2,56 +2,77 @@ import React, { Component } from "react";
 import { StyleSheet, View, ProgressBarAndroid } from "react-native";
 import { Card, Input, Button, ButtonGroup, Text } from "react-native-elements";
 import { connect } from "react-redux";
-import { nameChanged, contactNumberChanged, genderChanged, userTypeChanged } from "../../Actions/AuthAction";
+import Spinner from "../Common/Spinner";
+import { nameChanged, contactNumberChanged, genderChanged, userTypeChanged, addAdditionalInfo } from "../../Actions/AuthAction";
 
 class AdditionalInfo extends Component {
+    
+    constructor() {
+        super();
+        this.onContinueButton = this.onContinueButton.bind(this);
+    }
+    
+    onContinueButton() {
+        const { uid, name, contactNumber, gender, userType } = this.props;
+        this.props.addAdditionalInfo({uid, name, contactNumber, gender, userType});
+    } 
+
     render() {
         const genderButtons = ['Male','Female']
         const userTypeButtons = ['New User','Member', 'Veteran']
+
         return(
             <View style = {styles.additionalInfo}>
-                <View style = {{flex:1, justifyContent: 'flex-start', top:-6}}>
-                    <ProgressBarAndroid  styleAttr="Horizontal" color = "#CE0242" indeterminate={false} progress = {0.4} />
-                </View>
-                <Card containerStyle = {styles.cardContainer}>
-                    <Input
-                        placeholder = "Name"
-                        leftIcon = {{ type: 'MaterialIcons', name: 'person-outline' }}
-                        inputContainerStyle = {styles.inputContainerStyle}
-                        containerStyle = {styles.containerStyle}
-                        inputStyle = {{height:60}}
-                        onChangeText = {(textInput) => this.props.nameChanged(textInput)}
-                    />
-                    <Input
-                        keyboardType = "number-pad"
-                        placeholder = "Contact Number"
-                        leftIcon = {{ type: 'MaterialIcons', name: 'phonelink-ring' }}
-                        inputContainerStyle = {styles.inputContainerStyle}
-                        containerStyle = {styles.containerStyle}
-                        inputStyle = {{height:60}}
-                        onChangeText = {(textInput) => this.props.contactNumberChanged(textInput)}
-                    />
-                    <Text style = {{marginLeft: 20,paddingTop:10,paddingBottom:10,fontWeight:'bold'}}> GENDER </Text>
-                    <ButtonGroup
-                        buttons = {genderButtons}
-                        containerStyle = {styles.genderButtonStyle}
-                        onPress = {(selectedIndex) => this.props.genderChanged(selectedIndex)}
-                        selectedIndex = {this.props.gender}
-                    />
+                {
+                    this.props.loading ? <Spinner/>: 
+                    <View>
+                    <View style = {{flex:0, justifyContent: 'flex-start', top:-23}}>
+                        <ProgressBarAndroid  styleAttr="Horizontal" color = "#CE0242" indeterminate={false} progress = {0.4} />
+                    </View>
+                    <Card containerStyle = {styles.cardContainer}>
+                        <Input
+                            placeholder = "Full Name"
+                            leftIcon = {{ type: 'MaterialIcons', name: 'person-outline' }}
+                            inputContainerStyle = {styles.inputContainerStyle}
+                            containerStyle = {styles.containerStyle}
+                            inputStyle = {{height:60}}
+                            onChangeText = {(textInput) => this.props.nameChanged(textInput)}
+                            value = {this.props.name}
+                        />
+                        <Input
+                            keyboardType = "number-pad"
+                            placeholder = "Contact Number"
+                            leftIcon = {{ type: 'MaterialIcons', name: 'phonelink-ring' }}
+                            inputContainerStyle = {styles.inputContainerStyle}
+                            containerStyle = {styles.containerStyle}
+                            inputStyle = {{height:60}}
+                            onChangeText = {(textInput) => this.props.contactNumberChanged(textInput)}
+                            value = {this.props.contactNumber}
+                        />
+                        <Text style = {{marginLeft: 20,paddingTop:10,paddingBottom:10,fontWeight:'bold'}}> GENDER </Text>
+                        <ButtonGroup
+                            buttons = {genderButtons}
+                            containerStyle = {styles.genderButtonStyle}
+                            onPress = {(selectedIndex) => this.props.genderChanged(selectedIndex)}
+                            selectedIndex = {this.props.gender}
+                        />
 
-                    <Text style = {{marginLeft: 20,paddingBottom:10,fontWeight:'bold'}}> USER TYPE </Text>
-                    <ButtonGroup
-                        buttons = {userTypeButtons}
-                        containerStyle = {styles.usertypeButtonStyle}
-                        onPress = {(selectedIndex) => this.props.userTypeChanged(selectedIndex)}
-                        selectedIndex = {this.props.userType}
-                    />
-                    <Button
-                        title='Continue'
-                        buttonStyle = {styles.buttonStyle}
-                    />
+                        <Text style = {{marginLeft: 20,paddingBottom:10,fontWeight:'bold'}}> USER TYPE </Text>
+                        <ButtonGroup
+                            buttons = {userTypeButtons}
+                            containerStyle = {styles.usertypeButtonStyle}
+                            onPress = {(selectedIndex) => this.props.userTypeChanged(selectedIndex)}
+                            selectedIndex = {this.props.userType}
+                        />
+                        <Button
+                            title='Continue'
+                            buttonStyle = {styles.buttonStyle}
+                            onPress = {this.onContinueButton}
+                        />
 
-                </Card>
+                    </Card>
+                    </View>
+                }
             </View>
         );
     }
@@ -99,15 +120,18 @@ const mapDispatchToProps = {
     nameChanged,
     contactNumberChanged,
     genderChanged,
-    userTypeChanged
+    userTypeChanged,
+    addAdditionalInfo
 }
 
 const mapStateToProps = state => {
     return {
+        uid: state.auth.user.user.uid,
         name: state.auth.name,
         contactNumber: state.auth.contactNumber,
         gender: state.auth.gender,
-        userType: state.auth.userType
+        userType: state.auth.userType,
+        loading: state.auth.loading
     };
 };
 

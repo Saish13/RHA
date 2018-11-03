@@ -11,8 +11,8 @@ const RouterComponent = () => {
         <Router sceneStyle = {{backgroundColor:'transparent'}}>
             <Overlay key = "overlay">
                 <Scene key = "root" hideNavBar>
-                    <Scene key = "login" component = { Login } initial />
-                    <Scene key = "signup" component = { Signup }  />
+                    <Scene key = "login" component = { Login }  />
+                    <Scene key = "signup" component = { Signup } initial />
                     <Scene key = "additionalinfo" component = { AdditionalInfo }  />
                     <Scene key = "joinchapter" component = { JoinChapter } />
                     <Scene key = "spinner" component = { Spinner } />
