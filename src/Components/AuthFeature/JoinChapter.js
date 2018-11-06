@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import { StyleSheet, View, Dimensions } from "react-native";
 import { Card, Text } from "react-native-elements";
 import MapView, { Marker } from "react-native-maps";
+import { connect } from "react-redux";
+import { setUserLocation } from "../../Actions/AuthAction";
 
 const { width, height } = Dimensions.get('window')
 
@@ -10,6 +12,15 @@ const LATITUDE_DELTA = 0.0922;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO
 
 class JoinChapter extends Component {
+
+    constructor() {
+        super();
+        this.onSetUserLocation = this.onSetUserLocation.bind(this);
+    }
+
+    onSetUserLocation (location) {
+        this.props.setUserLocation(location);
+    }
 
     componentDidMount() {
         navigator.geolocation.getCurrentPosition((position) => {
@@ -21,9 +32,14 @@ class JoinChapter extends Component {
                 latitudeDelta: LATITUDE_DELTA,
                 longitudeDelta: LONGITUDE_DELTA
             }
+            let location = {
+                latitude: lat,
+                longitude: lng
+            }
+            this.onSetUserLocation(location);
         },
         (error) => alert(JSON.stringify(error)),
-        {enableHighAccuracy: true, timeout: 2000, maximumAge: 2000});
+        {enableHighAccuracy: true });
     }
 
     render() {
@@ -35,8 +51,8 @@ class JoinChapter extends Component {
                     minZoomLevel = {8}
                     showsCompass = {true}
                     initialRegion={{ 
-                        latitude: 18.645481,
-                        longitude: 73.795970,
+                        latitude: this.props.location.latitude,
+                        longitude: this.props.location.longitude,
                         latitudeDelta: LATITUDE_DELTA,
                         longitudeDelta: LONGITUDE_DELTA
                     }}
@@ -58,4 +74,14 @@ const styles = StyleSheet.create({
     }
 });
 
-export default JoinChapter;
+const mapDispatchToProps = {
+    setUserLocation
+}
+
+const mapStateToProps = state => {
+    return {
+        location: state.auth.userLocation,
+    };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(JoinChapter);

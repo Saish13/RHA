@@ -8,6 +8,10 @@ const initialDefaultState = {
     contactNumber: '',
     gender: -1,
     userType: 0,
+    userLocation: {
+        latitude: '',
+        longitutde: ''
+    },
     loading: false,
     user: null,
     error: ''
@@ -42,6 +46,8 @@ export default (state = initialDefaultState, action) => {
             return { ...state, loading: false }
         case 'ADDITIONAL_INFO_SUCCESS':
             return { ...state, loading: false, name: '', contactNumber: '', gender: -1, userType: -1 }
+        case 'SET_USER_LOCATION':
+            return { ...state, userLocation: action.payload }
         default:
             return state;
     }

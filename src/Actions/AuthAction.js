@@ -103,3 +103,10 @@ export const addAdditionalInfo = ({uid, name, contactNumber, gender, userType}) 
         .catch(e => console.log(e));
     }
 }
+
+export const setUserLocation = (location) => {
+    return {
+        type: 'SET_USER_LOCATION',
+        payload: location
+    }
+}
