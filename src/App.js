@@ -19,8 +19,8 @@ export default class App extends Component {
             <Provider store = {store} >
                 <View style = {styles.appContainer}>
                     <Image style = {{ width: '100%', height: '100%', position:"absolute"}} source = { require("../assets/images/abstract-art-artificial-131634.jpg")}/>
-                    <Router />
                     <StatusBar backgroundColor="#378555" barStyle="light-content"/>
+                    <Router />
                 </View>
             </Provider>
         );

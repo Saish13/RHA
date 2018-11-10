@@ -14,7 +14,8 @@ const initialDefaultState = {
     },
     loading: false,
     user: null,
-    error: ''
+    error: '',
+    chapters: null
 };
 
 export default (state = initialDefaultState, action) => {
@@ -40,6 +41,8 @@ export default (state = initialDefaultState, action) => {
             return { ...state, password_login: action.payload }
         case 'LOADING':
             return { ...state, loading: true }
+        case 'LOADED':
+            return { ...state, loading: false }
         case 'SIGNUP_SUCCESS':
             return { ...state, loading: false, email: '', password: '', confirmPassword: '', user: action.payload }
         case 'SIGNUP_FAILURE':
@@ -47,7 +50,9 @@ export default (state = initialDefaultState, action) => {
         case 'ADDITIONAL_INFO_SUCCESS':
             return { ...state, loading: false, name: '', contactNumber: '', gender: -1, userType: -1 }
         case 'SET_USER_LOCATION':
-            return { ...state, userLocation: action.payload }
+            return { ...state, userLocation: action.payload, loading: true }
+        case 'GET_ALL_CHAPTERS':
+            return { ...state, chapters: action.payload, loading: true }
         default:
             return state;
     }

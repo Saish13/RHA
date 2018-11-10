@@ -110,3 +110,15 @@ export const setUserLocation = (location) => {
         payload: location
     }
 }
+
+export const getAllChapters = () => {
+    return(dispatch) => {
+        database.ref('/chapters').once('value')
+        .then(snapshot => {
+            const chapters = snapshot.val();
+            dispatch({type:'GET_ALL_CHAPTERS', payload: chapters});
+        })
+        .catch(e => console.log(e));
+        dispatch({type:'LOADED'})
+    }
+}
